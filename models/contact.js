@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const emailRegexp = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
+
 const { handleSaveErrors } = require("../helpers");
 
 const contactSchema = new Schema(
@@ -11,6 +13,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      match: emailRegexp,
       unique: true,
     },
     phone: {
@@ -19,6 +22,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
